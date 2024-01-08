@@ -1,25 +1,61 @@
 <template>
-  <div class="globalHeader">
-    <a-menu mode="horizontal" :default-selected-keys="['1']">
-      <a-menu-item
-        key="0"
-        :style="{ padding: 0, marginRight: '38px' }"
-        disabled
+  <a-row id="globalHeader" style="margin-bottom: 16px" align="center">
+    <a-col flex="auto">
+      <a-menu
+        mode="horizontal"
+        :selected-keys="selectedKey"
+        @menu-item-click="doMenuClick"
       >
-        <div class="title-bar">
-          <img class="logo" src="../assets/logo.svg" />
-          <div class="title-bar-tittle">Ray - OJ</div>
-        </div>
-      </a-menu-item>
-      <a-menu-item key="1">Home</a-menu-item>
-      <a-menu-item key="2">Solution</a-menu-item>
-      <a-menu-item key="3">Cloud Service</a-menu-item>
-      <a-menu-item key="4">Cooperation</a-menu-item>
-    </a-menu>
-  </div>
+        <a-menu-item
+          key="0"
+          :style="{ padding: 0, marginRight: '38px' }"
+          disabled
+        >
+          <div class="title-bar">
+            <img class="logo" src="../assets/logo.svg" />
+            <div class="title-bar-tittle">Ray - OJ</div>
+          </div>
+        </a-menu-item>
+        <a-menu-item v-for="item in routes" :key="item.path">
+          {{ item.name }}
+        </a-menu-item>
+      </a-menu>
+    </a-col>
+    <a-col flex="100px">
+      <div>{{ store.state?.user?.loginUser?.userName ?? "Not Login" }}</div>
+    </a-col>
+  </a-row>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { routes } from "@/router/routes";
+import { useRouter } from "vue-router";
+import { ref } from "vue";
+import { useStore } from "vuex";
+
+const router = useRouter();
+
+// default home page
+const selectedKey = ref(["/"]);
+
+router.afterEach((to, from, failure) => {
+  selectedKey.value = [to.path];
+});
+const store = useStore();
+setTimeout(() => {
+  store.dispatch("user/getLoginUser", {
+    loginUser: {
+      userName: "ray0",
+      role: "admin",
+    },
+  });
+}, 3000);
+const doMenuClick = (key: string) => {
+  router.push({
+    path: key,
+  });
+};
+</script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
