@@ -1,5 +1,5 @@
 <template>
-  <a-row id="globalHeader" style="margin-bottom: 16px" align="center">
+  <a-row id="globalHeader" align="center" :wrap="false">
     <a-col flex="auto">
       <a-menu
         mode="horizontal"
@@ -16,7 +16,7 @@
             <div class="title-bar-tittle">Ray - OJ</div>
           </div>
         </a-menu-item>
-        <a-menu-item v-for="item in routes" :key="item.path">
+        <a-menu-item v-for="item in visibleRoutes" :key="item.path">
           {{ item.name }}
         </a-menu-item>
       </a-menu>
@@ -30,10 +30,26 @@
 <script setup lang="ts">
 import { routes } from "@/router/routes";
 import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
+import checkAccess from "@/authorization/checkAccess";
+import ACCESS_ENUM from "@/authorization/accessEnum";
 
 const router = useRouter();
+const store = useStore();
+
+const visibleRoutes = computed(() => {
+  const loginUser = store.state.user.loginUser;
+  return routes.filter((item) => {
+    if (item.meta?.hideInMenu) {
+      return false;
+    }
+    if (checkAccess(loginUser, item?.meta?.access as string)) {
+      return true;
+    }
+    return false;
+  });
+});
 
 // default home page
 const selectedKey = ref(["/"]);
@@ -41,12 +57,12 @@ const selectedKey = ref(["/"]);
 router.afterEach((to, from, failure) => {
   selectedKey.value = [to.path];
 });
-const store = useStore();
+
 setTimeout(() => {
   store.dispatch("user/getLoginUser", {
     loginUser: {
       userName: "ray0",
-      role: "admin",
+      userRole: ACCESS_ENUM.ADMIN,
     },
   });
 }, 3000);

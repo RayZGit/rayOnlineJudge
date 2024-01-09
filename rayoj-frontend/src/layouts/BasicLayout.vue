@@ -1,6 +1,6 @@
 <template>
   <div id="basicLayout">
-    <a-layout style="height: 400px">
+    <a-layout style="min-height: 100vh">
       <a-layout-header class="header"> <GlobalHeader /> </a-layout-header>
       <a-layout-content class="content">
         <router-view />
@@ -22,11 +22,13 @@
 #basicLayout .content {
   background: linear-gradient(to right, #eee, #000);
   margin-bottom: 16px;
+  padding: 20px;
 }
 
 #basicLayout .footer {
   background: #efefef;
   padding: 16px;
+  position: sticky;
 }
 </style>
 

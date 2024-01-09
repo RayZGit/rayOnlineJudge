@@ -16,6 +16,13 @@ import { useStore } from "vuex";
 
 const router = useRouter();
 const store = useStore();
+/**
+ *  Global Initialization Function
+ */
+const doInit = () => {
+  console.log("init");
+};
+
 router.beforeEach((to, from, next) => {
   if (to.meta?.access === "canAdmin") {
     if (store.state.user?.loginUser?.role !== "admin") {

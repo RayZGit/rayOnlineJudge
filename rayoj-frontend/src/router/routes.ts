@@ -3,6 +3,7 @@ import HomeView from "@/views/HomeView.vue";
 import AdminView from "@/views/AdminView.vue";
 import NoAuth from "@/views/NoAuthView.vue";
 import NoAuthView from "@/views/NoAuthView.vue";
+import ACCESS_ENUM from "@/authorization/accessEnum";
 
 export const routes: Array<RouteRecordRaw> = [
   {
@@ -15,13 +16,16 @@ export const routes: Array<RouteRecordRaw> = [
     name: "Admin Only",
     component: AdminView,
     meta: {
-      access: "canAdmin",
+      access: ACCESS_ENUM.ADMIN,
     },
   },
   {
     path: "/noAuth",
     name: "No Auth",
     component: NoAuthView,
+    meta: {
+      hideInMenu: true,
+    },
   },
   {
     path: "/Problems",
