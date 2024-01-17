@@ -58,14 +58,14 @@ router.afterEach((to, from, failure) => {
   selectedKey.value = [to.path];
 });
 
-setTimeout(() => {
-  store.dispatch("user/getLoginUser", {
-    loginUser: {
-      userName: "ray0",
-      userRole: ACCESS_ENUM.ADMIN,
-    },
-  });
-}, 3000);
+// setTimeout(() => {
+//   store.dispatch("user/getLoginUser", {
+//     loginUser: {
+//       userName: "ray0",
+//       userRole: ACCESS_ENUM.ADMIN,
+//     },
+//   });
+// }, 3000);
 const doMenuClick = (key: string) => {
   router.push({
     path: key,

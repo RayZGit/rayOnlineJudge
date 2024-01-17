@@ -13,6 +13,7 @@ export default {
   actions: {
     async getLoginUser({ commit, state }, payload) {
       const res = await UserControllerService.getLoginUserUsingGet();
+      // console.log("user/getLoginUser log, " + JSON.stringify(res));
       if (res.code === 0) {
         commit("updateUser", res.data);
       } else {
@@ -25,7 +26,8 @@ export default {
   },
   mutations: {
     updateUser(state, payload) {
-      state.loginUser = payload?.loginUser;
+      // console.log("user/updateUser log, " + JSON.stringify(payload));
+      state.loginUser = payload;
     },
   },
 } as StoreOptions<any>;
