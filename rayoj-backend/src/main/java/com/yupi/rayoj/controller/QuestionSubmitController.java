@@ -1,11 +1,19 @@
 package com.yupi.rayoj.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yupi.rayoj.common.BaseResponse;
 import com.yupi.rayoj.common.ErrorCode;
 import com.yupi.rayoj.common.ResultUtils;
 import com.yupi.rayoj.exception.BusinessException;
+import com.yupi.rayoj.exception.ThrowUtils;
+import com.yupi.rayoj.model.dto.question.QuestionQueryRequest;
 import com.yupi.rayoj.model.dto.questionsubmit.QuestionSubmitAddRequest;
+import com.yupi.rayoj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
+import com.yupi.rayoj.model.entity.Question;
+import com.yupi.rayoj.model.entity.QuestionSubmit;
 import com.yupi.rayoj.model.entity.User;
+import com.yupi.rayoj.model.vo.QuestionSubmitVO;
+import com.yupi.rayoj.model.vo.QuestionVO;
 import com.yupi.rayoj.service.QuestionSubmitService;
 import com.yupi.rayoj.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +57,30 @@ public class QuestionSubmitController {
         long questionId = questionSubmitAddRequest.getQuestionId();
         long questionSubmitId = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
         return ResultUtils.success(questionSubmitId);
+    }
+
+    /**
+     * 分页获取当题目提交列表
+     *
+     * @param questionSubmitQueryRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/my/list/page")
+    public BaseResponse<Page<QuestionSubmitVO>> listQuestionSubmitVOByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest,
+                                                                         HttpServletRequest request) {
+        if (questionSubmitQueryRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        long current = questionSubmitQueryRequest.getCurrent();
+        long size = questionSubmitQueryRequest.getPageSize();
+        // 限制爬虫
+        ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
+        Page<QuestionSubmit> questionSubmitPage = questionSubmitService.page(new Page<>(current, size),
+                questionSubmitService.getQueryWrapper(questionSubmitQueryRequest));
+        return ResultUtils.success(questionSubmitService.getQuestionSubmitVOPage(questionSubmitPage, request));
+
     }
 
 }
