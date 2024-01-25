@@ -1,6 +1,12 @@
 <template>
   <div id="userLogin">
-    <a-form :model="form" :style="{ width: '600px' }" @submit="handleSubmit">
+    <a-form
+      style="max-width: 480px; margin: 0 auto"
+      :model="form"
+      label-align="left"
+      auto-label-width
+      @submit="handleSubmit"
+    >
       <a-form-item
         field="userAccount"
         tooltip="Please enter account"
@@ -18,7 +24,7 @@
         />
       </a-form-item>
       <a-form-item>
-        <a-button html-type="submit">Submit</a-button>
+        <a-button html-type="submit" type="primary">Submit</a-button>
       </a-form-item>
     </a-form>
   </div>

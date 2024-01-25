@@ -1,7 +1,12 @@
 <template>
   <div id="userLayout">
     <a-layout style="min-height: 100vh">
-      <a-layout-header class="header"> User Layout </a-layout-header>
+      <a-layout-header class="header">
+        <a-space>
+          <img src="../assets/logo.svg" class="logo" />
+          <div>RayOJ</div>
+        </a-space>
+      </a-layout-header>
       <a-layout-content class="content">
         <router-view />
       </a-layout-content>
@@ -12,11 +17,17 @@
 
 <style scoped>
 #userLayout {
+  text-align: center;
+  label-align: "left";
 }
 
+#userLayout .logo {
+  width: 64px;
+  height: 64px;
+}
 #userLayout .header {
+  margin-top: 16px;
   margin-bottom: 16px;
-  box-shadow: #eee 2px 2px 5px;
 }
 
 #userLayout .content {
